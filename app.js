@@ -33,3 +33,111 @@ function shuffle (src) {
 /**********************************************
  * YOUR CODE BELOW
  **********************************************/
+
+//1. An array of words must be created. The words should not include spaces or special characters. There must be at least 10 words in the array.
+const wordList = ['pencil', 'desk', 'marker', 'glue', 'scissors', 'notebook', 'binder', 'lunch', 'recess', 'subjects'];
+
+
+function App() {
+  //2. The game should be persistent. The player's progress should be tracked throughout the game and stored in local storage.
+  const [words, setWords] = React.useState(() => {
+    const saved = localStorage.getItem('scramble_words');
+    return saved ? JSON.parse(saved) : shuffle(wordList);
+  });
+
+  const [points, setPoints] = React.useState(() =>
+  parseInt(localStorage.getItem('scramble_points')) || 0
+  );
+
+  const [strikes, setStrikes] = React.useState(() =>
+  parseInt(localStorage.getItem('scramble_strikes')) || 0
+  );  
+
+  const [passes, setPasses] = React.useState(() =>
+  parseInt(localStorage.getItem('scramble_passes')) || 3
+  );
+
+  const [guess, setGuess] = React.useState('');
+  const [message, setMessage] = React.useState('');
+
+  //3. The player must be able to guess by typing into a textbox and hitting enter. Once a guess has been made, correct or incorrect, the textbox should be cleared. Making a guess should NOT cause a page refresh.
+  React.useEffect(() => {
+    localStorage.setItem('scramble_words', JSON.stringify(words));
+    localStorage.setItem('scramble_points', points);
+    localStorage.setItem('scramble_strikes', strikes);
+    localStorage.setItem('scramble_passes', passes);
+  }, [words, points, strikes, passes]);
+
+  const handleGuessSubmit = (e) => {
+    e.preventDefault(); 
+    
+    const currentWord = words[0];
+    if (guess.toLowerCase() === currentWord.toLowerCase()) {
+      setMessage('Correct!');
+      setPoints(points + 1);
+      setWords(words.slice(1)); 
+    } else {
+      setMessage('Incorrect, try again!');
+      setStrikes(strikes + 1);
+    }
+    setGuess(''); 
+  };
+
+  const handlePass = () => {
+    if (passes > 0) {
+      setPasses(passes - 1);
+      setWords(words.slice(1));
+      setMessage('Word passed.');
+    }
+  };
+
+  const restartGame = () => {
+    setWords(shuffle(wordList));
+    setPoints(0);
+    setStrikes(0);
+    setPasses(3);
+    setMessage('');
+  };
+
+  if (strikes >= 3 || words.length === 0) {
+    return (
+      <div className="game-container">
+        <h1>Game Over</h1>
+        <p>Your Final Score: {points}</p>
+        <button onClick={restartGame}>Play Again</button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="game-container">
+      <h1>Welcome to Scramble.</h1>
+      <div className="stats">
+        <p>Points: {points} | Strikes: {strikes} | Passes: {passes}</p>
+      </div>
+
+      <div className="game-board">
+        <h2 className="scrambled-display">{shuffle(words[0])}</h2>
+        
+        {message && <p className="feedback">{message}</p>}
+
+        <form onSubmit={handleGuessSubmit}>
+          <input type="text" value={guess} onChange={(e) => setGuess(e.target.value)} placeholder="Enter your guess"/>
+
+
+          <div className="actions">
+            <button type="submit">Guess</button>
+            <button onClick={handlePass} disabled={passes <= 0} className="pass-btn">
+            Pass
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);

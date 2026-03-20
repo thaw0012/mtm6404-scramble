@@ -1,0 +1,48 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.game-container {
+    justify-content: center;
+    align-items: center;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.scrambled-display {
+    font-size: 30px;
+    text-align: center;
+    margin: 40px 0;
+    letter-spacing: 10px;
+    text-transform: uppercase;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+    border-bottom: 1px solid #000000;
+    font-weight: bold;
+}
+
+.game-board {
+    text-align: center;
+}
+
+button {
+    display: flex;
+    padding: 10px;
+    margin: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
