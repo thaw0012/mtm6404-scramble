@@ -27,12 +27,13 @@ function shuffle (src) {
     return copy.join('')
   }
 
-  return copy
+  return copy 
 }
 
 /**********************************************
  * YOUR CODE BELOW
  **********************************************/
+
 
 //words relating to school
 const wordList = ['pencil', 'desk', 'marker', 'glue', 'scissors', 'notebook', 'binder', 'lunch', 'recess', 'subjects'];
