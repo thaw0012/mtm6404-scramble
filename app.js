@@ -34,7 +34,7 @@ function shuffle (src) {
  * YOUR CODE BELOW
  **********************************************/
 
-//1. An array of words must be created. The words should not include spaces or special characters. There must be at least 10 words in the array.
+//words relating to school
 const wordList = ['pencil', 'desk', 'marker', 'glue', 'scissors', 'notebook', 'binder', 'lunch', 'recess', 'subjects'];
 
 
@@ -60,7 +60,7 @@ function App() {
   const [guess, setGuess] = React.useState('');
   const [message, setMessage] = React.useState('');
 
-  //3. The player must be able to guess by typing into a textbox and hitting enter. Once a guess has been made, correct or incorrect, the textbox should be cleared. Making a guess should NOT cause a page refresh.
+  //update local storage whenever the game changes
   React.useEffect(() => {
     localStorage.setItem('scramble_words', JSON.stringify(words));
     localStorage.setItem('scramble_points', points);
@@ -71,6 +71,7 @@ function App() {
   const handleGuessSubmit = (e) => {
     e.preventDefault(); 
     
+    //Guess handling
     const currentWord = words[0];
     if (guess.toLowerCase() === currentWord.toLowerCase()) {
       setMessage('Correct!');
@@ -83,6 +84,7 @@ function App() {
     setGuess(''); 
   };
 
+  //pass handling
   const handlePass = () => {
     if (passes > 0) {
       setPasses(passes - 1);
@@ -91,6 +93,7 @@ function App() {
     }
   };
 
+  //reset to start a fresh game
   const restartGame = () => {
     setWords(shuffle(wordList));
     setPoints(0);
@@ -99,6 +102,7 @@ function App() {
     setMessage('');
   };
 
+  //game over screen
   if (strikes >= 3 || words.length === 0) {
     return (
       <div className="game-container">
@@ -109,6 +113,7 @@ function App() {
     );
   }
 
+  //displays game on site
   return (
     <div className="game-container">
       <h1>Welcome to Scramble.</h1>
@@ -119,7 +124,7 @@ function App() {
       <div className="game-board">
         <h2 className="scrambled-display">{shuffle(words[0])}</h2>
         
-        {message && <p className="feedback">{message}</p>}
+        {message && <p className="msg">{message}</p>}
 
         <form onSubmit={handleGuessSubmit}>
           <input type="text" value={guess} onChange={(e) => setGuess(e.target.value)} placeholder="Enter your guess"/>
